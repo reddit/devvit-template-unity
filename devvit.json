@@ -1,6 +1,6 @@
 {
   "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
-  "name": "unity-starter",
+  "name": "<% name %>",
   "post": {
     "dir": "dist/client",
     "entrypoints": {
@@ -24,7 +24,7 @@
     "items": [
       {
         "label": "Create a new post",
-        "description": "unity-starter",
+        "description": "<% name %>",
         "location": "subreddit",
         "forUserType": "moderator",
         "endpoint": "/internal/menu/post-create"
@@ -33,8 +33,5 @@
   },
   "triggers": {
     "onAppInstall": "/internal/on-app-install"
-  },
-  "dev": {
-    "subreddit": "unity_starter_dev"
   }
 }

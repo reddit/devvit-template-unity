@@ -1,16 +1,17 @@
-## Devvit Hello World Starter
+## Devvit Unity Starter
 
 A starter to build web applications on Reddit's developer platform
 
 - [Devvit](https://developers.reddit.com/): A way to build and deploy immersive games on Reddit
 - [Express](https://expressjs.com/): For backend logic
 - [Typescript](https://www.typescriptlang.org/): For type safety
+- [Unity](https://www.unity.com/): For gameplay
 
 ## Getting Started
 
 > Make sure you have Node 22 downloaded on your machine before running!
 
-1. Run `npm create devvit@latest --template=hello-world`
+1. Run `npm create devvit@latest --template=unity`
 2. Go through the installation wizard. You will need to create a Reddit account and connect it to Reddit developers
 3. Copy the command on the success page into your terminal
 
