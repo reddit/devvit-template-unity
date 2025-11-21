@@ -12,10 +12,10 @@
     // React
     "jsx": "react-jsx",
 
-    "tsBuildInfoFile": "../../dist/client/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "../../dist/types/client/tsconfig.tsbuildinfo"
   },
   // https://github.com/Microsoft/TypeScript/issues/25636
-  "include": ["**/*", "**/*.json"],
+  "include": ["**/*", "**/*.json", "vite.config.ts"],
   "exclude": ["**/*.test.ts"],
   "references": [{ "path": "../shared" }]
 }

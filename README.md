@@ -1,19 +1,16 @@
-## Devvit React Starter
+## Devvit Hello World Starter
 
 A starter to build web applications on Reddit's developer platform
 
 - [Devvit](https://developers.reddit.com/): A way to build and deploy immersive games on Reddit
-- [Vite](https://vite.dev/): For compiling the webView
-- [React](https://react.dev/): For UI
 - [Express](https://expressjs.com/): For backend logic
-- [Tailwind](https://tailwindcss.com/): For styles
 - [Typescript](https://www.typescriptlang.org/): For type safety
 
 ## Getting Started
 
 > Make sure you have Node 22 downloaded on your machine before running!
 
-1. Run `npm create devvit@latest --template=react`
+1. Run `npm create devvit@latest --template=hello-world`
 2. Go through the installation wizard. You will need to create a Reddit account and connect it to Reddit developers
 3. Copy the command on the success page into your terminal
 
@@ -25,7 +22,3 @@ A starter to build web applications on Reddit's developer platform
 - `npm run launch`: Publishes your app for review
 - `npm run login`: Logs your CLI into Reddit
 - `npm run check`: Type checks, lints, and prettifies your app
-
-## Cursor Integration
-
-This template comes with a pre-configured cursor environment. To get started, [download cursor](https://www.cursor.com/downloads) and enable the `devvit-mcp` when prompted.

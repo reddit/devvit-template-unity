@@ -1,7 +1,17 @@
-import express from 'express';
-import { InitResponse, IncrementResponse, DecrementResponse } from '../shared/types/api';
-import { redis, reddit, createServer, context, getServerPort } from '@devvit/web/server';
-import { createPost } from './core/post';
+import express from "express";
+import {
+  InitResponse,
+  LevelCompletedRequest,
+  LevelCompletedResponse,
+} from "../shared/types/api";
+import {
+  createServer,
+  context,
+  getServerPort,
+  reddit,
+  redis,
+} from "@devvit/web/server";
+import { createPost } from "./core/post";
 
 const app = express();
 
@@ -14,82 +24,106 @@ app.use(express.text());
 
 const router = express.Router();
 
-router.get<{ postId: string }, InitResponse | { status: string; message: string }>(
-  '/api/init',
-  async (_req, res): Promise<void> => {
-    const { postId } = context;
+// Example to show how to send initial data to the Unity Game
+router.get<
+  { postId: string },
+  InitResponse | { status: string; message: string }
+>("/api/init", async (_req, res): Promise<void> => {
+  const { postId } = context;
 
-    if (!postId) {
-      console.error('API Init Error: postId not found in devvit context');
-      res.status(400).json({
-        status: 'error',
-        message: 'postId is required but missing from context',
-      });
-      return;
-    }
+  if (!postId) {
+    console.error("API Init Error: postId not found in devvit context");
+    res.status(400).json({
+      status: "error",
+      message: "postId is required but missing from context",
+    });
+    return;
+  }
 
-    try {
-      const [count, username] = await Promise.all([
-        redis.get('count'),
-        reddit.getCurrentUsername(),
-      ]);
-
-      res.json({
-        type: 'init',
-        postId: postId,
-        count: count ? parseInt(count) : 0,
-        username: username ?? 'anonymous',
-      });
-    } catch (error) {
-      console.error(`API Init Error for post ${postId}:`, error);
-      let errorMessage = 'Unknown error during initialization';
-      if (error instanceof Error) {
-        errorMessage = `Initialization failed: ${error.message}`;
+  try {
+    const username = await reddit.getCurrentUsername();
+    const currentUsername = username ?? "anonymous";
+    
+    // Fetch user info for snoovatar
+    let snoovatarUrl = "";
+    if (username && context.userId) {
+      const user = await reddit.getUserById(context.userId);
+      if (user) {
+        snoovatarUrl = (await user.getSnoovatarUrl()) ?? "";
       }
-      res.status(400).json({ status: 'error', message: errorMessage });
     }
-  }
-);
+    
+    // Fetch previous time from Redis using postId:username as key
+    const redisKey = `${postId}:${currentUsername}`;
+    const previousTime = await redis.get(redisKey);
 
-router.post<{ postId: string }, IncrementResponse | { status: string; message: string }, unknown>(
-  '/api/increment',
-  async (_req, res): Promise<void> => {
-    const { postId } = context;
-    if (!postId) {
+    res.json({
+      type: "init",
+      postId: postId,
+      username: currentUsername,
+      snoovatarUrl: snoovatarUrl,
+      previousTime: previousTime ?? "",
+    });
+  } catch (error) {
+    console.error(`API Init Error for post ${postId}:`, error);
+    let errorMessage = "Unknown error during initialization";
+    if (error instanceof Error) {
+      errorMessage = `Initialization failed: ${error.message}`;
+    }
+    res.status(400).json({ status: "error", message: errorMessage });
+  }
+});
+
+router.post<
+  unknown,
+  LevelCompletedResponse | { status: string; message: string },
+  LevelCompletedRequest
+>("/api/level-completed", async (req, res): Promise<void> => {
+  const { postId } = context;
+  
+  if (!postId) {
+    console.error("No postId in context");
+    res.status(400).json({
+      status: "error",
+      message: "postId is required",
+    });
+    return;
+  }
+
+  try {
+    const { username, time } = req.body;
+    
+    if (!username || !time) {
+      console.error("Missing username or time in request");
       res.status(400).json({
-        status: 'error',
-        message: 'postId is required',
+        status: "error",
+        message: "username and time are required",
       });
       return;
     }
 
-    res.json({
-      count: await redis.incrBy('count', 1),
-      postId,
-      type: 'increment',
-    });
-  }
-);
+    // Store the completion time in Redis with key format: postId:username
+    const redisKey = `${postId}:${username}`;
+    await redis.set(redisKey, time);
 
-router.post<{ postId: string }, DecrementResponse | { status: string; message: string }, unknown>(
-  '/api/decrement',
-  async (_req, res): Promise<void> => {
-    const { postId } = context;
-    if (!postId) {
-      res.status(400).json({
-        status: 'error',
-        message: 'postId is required',
-      });
-      return;
+    res.json({
+      type: "level-completed",
+      success: true,
+      message: "Time saved successfully",
+    });
+  } catch (error) {
+    console.error(`API Level Completed Error for post ${postId}:`, error);
+    let errorMessage = "Unknown error saving completion time";
+    if (error instanceof Error) {
+      errorMessage = `Failed to save time: ${error.message}`;
     }
-
-    res.json({
-      count: await redis.incrBy('count', -1),
-      postId,
-      type: 'decrement',
+    res.status(500).json({
+      type: "level-completed",
+      success: false,
+      message: errorMessage,
     });
   }
-);
+});
 
 router.post('/internal/on-app-install', async (_req, res): Promise<void> => {
   try {
@@ -111,6 +145,7 @@ router.post('/internal/on-app-install', async (_req, res): Promise<void> => {
 router.post('/internal/menu/post-create', async (_req, res): Promise<void> => {
   try {
     const post = await createPost();
+    post
 
     res.json({
       navigateTo: `https://reddit.com/r/${context.subredditName}/comments/${post.id}`,
@@ -124,12 +159,8 @@ router.post('/internal/menu/post-create', async (_req, res): Promise<void> => {
   }
 });
 
-// Use router middleware
 app.use(router);
 
-// Get port from environment variable with fallback
-const port = getServerPort();
-
 const server = createServer(app);
-server.on('error', (err) => console.error(`server error; ${err.stack}`));
-server.listen(port);
+server.on("error", (err) => console.error(`server error; ${err.stack}`));
+server.listen(getServerPort());

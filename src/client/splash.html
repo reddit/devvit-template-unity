@@ -1,15 +1,33 @@
-<!doctype html>
-<html lang="en" class="h-full">
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <link rel="stylesheet" type="text/css" href="splash/splash.css" />
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+      content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height, user-scalable=0"
     />
     <title>devvit</title>
   </head>
-  <body class="h-full">
-    <div id="root" class="h-full"></div>
-    <script type="module" src="splash/splash.tsx"></script>
+  <body class="app">
+    <img class="snoo" src="/Snoo_Yes.png" alt="Snoo" /><img class="logo" src="/TemplateData/unity-logo-light.png" alt="Logo" />
+
+    <div class="content">
+      <h1 class="title" id="title"></h1>
+      <p class="description">
+        Edit <span class="code">src/client/splash/splash.ts</span> to modify this screen.
+      </p>
+    </div>
+    <div>
+      <button class="start-button" id="start-button">Launch Unity Game</button>
+    </div>
+    <footer class="footer">
+      <div class="docs-link" tabindex="0" id="docs-link">Docs</div>
+      <span class="divider">|</span>
+      <div class="docs-link" tabindex="0" id="playtest-link">r/Devvit</div>
+      <span class="divider">|</span>
+      <div class="docs-link" tabindex="0" id="discord-link">Discord</div>
+    </footer>
+    <script type="module" src="splash/splash.ts" defer></script>
   </body>
 </html>

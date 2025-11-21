@@ -1,6 +1,6 @@
 {
   "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
-  "name": "<% name %>",
+  "name": "unity-starter",
   "post": {
     "dir": "dist/client",
     "entrypoints": {
@@ -9,22 +9,22 @@
         "entry": "splash.html"
       },
       "game": {
-        "entry": "game.html"
+        "entry": "index.html"
       }
     }
+  },
+  "media": {
+    "dir": "assets"
   },
   "server": {
     "dir": "dist/server",
     "entry": "index.cjs"
   },
-  "media": {
-    "dir": "assets"
-  },
   "menu": {
     "items": [
       {
         "label": "Create a new post",
-        "description": "<% name %>",
+        "description": "unity-starter",
         "location": "subreddit",
         "forUserType": "moderator",
         "endpoint": "/internal/menu/post-create"
@@ -33,5 +33,8 @@
   },
   "triggers": {
     "onAppInstall": "/internal/on-app-install"
+  },
+  "dev": {
+    "subreddit": "unity_starter_dev"
   }
 }

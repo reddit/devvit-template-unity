@@ -1,18 +1,21 @@
 export type InitResponse = {
-  type: 'init';
+  type: "init";
   postId: string;
-  count: number;
   username: string;
+  snoovatarUrl: string;
+  previousTime: string; // empty string if no previous time exists
 };
 
-export type IncrementResponse = {
-  type: 'increment';
+export type LevelCompletedRequest = {
+  type: "level-completed";
+  username: string;
   postId: string;
-  count: number;
+  time: string;
 };
 
-export type DecrementResponse = {
-  type: 'decrement';
-  postId: string;
-  count: number;
+export type LevelCompletedResponse = {
+  type: "level-completed";
+  success: boolean;
+  message?: string;
 };
+
