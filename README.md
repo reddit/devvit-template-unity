@@ -7,6 +7,8 @@ A starter to build web applications on Reddit's developer platform
 - [Typescript](https://www.typescriptlang.org/): For type safety
 - [Unity](https://www.unity.com/): For gameplay
 
+The full Unity project for this project can be found [here](https://github.com/reddit/devvit-unity-project)
+
 ## Getting Started
 
 > Make sure you have Node 22 downloaded on your machine before running!
