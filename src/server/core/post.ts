@@ -1,7 +1,7 @@
-import { reddit } from "@devvit/web/server";
+import { reddit } from '@devvit/web/server';
 
 export const createPost = async () => {
   return await reddit.submitCustomPost({
-    title: "unity-starter",
+    title: '<% name %>',
   });
 };

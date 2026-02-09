@@ -3,8 +3,8 @@
 A starter to build web applications on Reddit's developer platform
 
 - [Devvit](https://developers.reddit.com/): A way to build and deploy immersive games on Reddit
-- [Express](https://expressjs.com/): For backend logic
-- [Typescript](https://www.typescriptlang.org/): For type safety
+- [Hono](https://hono.dev/): For backend logic
+- [TypeScript](https://www.typescriptlang.org/): For type safety
 - [Unity](https://www.unity.com/): For gameplay
 
 The full Unity project for this project can be found [here](https://github.com/reddit/devvit-unity-project)
@@ -24,4 +24,4 @@ The full Unity project for this project can be found [here](https://github.com/r
 - `npm run deploy`: Uploads a new version of your app
 - `npm run launch`: Publishes your app for review
 - `npm run login`: Logs your CLI into Reddit
-- `npm run check`: Type checks, lints, and prettifies your app
+- `npm run type-check`: Type checks, lints, and prettifies your app
